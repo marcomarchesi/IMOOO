@@ -2,6 +2,10 @@
 #include <Wire.h>
 #include "MadgwickAHRS.h"
 
+#define FACTORACC (float)0.0392262
+#define FACTORGYR (float)0.0011826
+#define FACTORMAG (float)0.092
+
 GY_85 GY85;     //create the object
 MadgwickAHRS Mad;
 void setup()
@@ -18,22 +22,22 @@ void setup()
 
 void loop()
 {
-    float ax = (float)GY85.accelerometer_x( GY85.readFromAccelerometer() );
-    float ay = (float)GY85.accelerometer_y( GY85.readFromAccelerometer() );
-    float az = (float)GY85.accelerometer_z( GY85.readFromAccelerometer() );
+    float ax = (float)GY85.accelerometer_x( GY85.readFromAccelerometer() ) * FACTORACC;
+    float ay = (float)GY85.accelerometer_y( GY85.readFromAccelerometer() ) * FACTORACC;
+    float az = (float)GY85.accelerometer_z( GY85.readFromAccelerometer() ) * FACTORACC;
     
-    float cx = (float)GY85.compass_x( GY85.readFromCompass() );
-    float cy = (float)GY85.compass_y( GY85.readFromCompass() );
-    float cz = (float)GY85.compass_z( GY85.readFromCompass() );
+    float cx = (float)GY85.compass_x( GY85.readFromCompass() ) * FACTORMAG;
+    float cy = (float)GY85.compass_y( GY85.readFromCompass() ) * FACTORMAG;
+    float cz = (float)GY85.compass_z( GY85.readFromCompass() ) * FACTORMAG;
 
-    float gx = GY85.gyro_x( GY85.readGyro() ) * M_PI/180;
-    float gy = GY85.gyro_y( GY85.readGyro() ) * M_PI/180;
-    float gz = GY85.gyro_z( GY85.readGyro() ) * M_PI/180;
+    float gx = GY85.gyro_x( GY85.readGyro() ) * FACTORGYR ;
+    float gy = GY85.gyro_y( GY85.readGyro() ) * FACTORGYR ;
+    float gz = GY85.gyro_z( GY85.readGyro() ) * FACTORGYR ;
 
       Mad.update(gx,gy,gz,ax,ay,az,cx,cy,cz);
-      float roll = Mad.getRoll() * 180/M_PI;
-      float pitch = Mad.getPitch() *  180/M_PI;
-      float yaw = Mad.getYaw() *  180/M_PI;
+      float roll = Mad.getRoll();
+      float pitch = Mad.getPitch();
+      float yaw = Mad.getYaw();
       
       Serial.print  ( " AB " );
       Serial.print ( ax );

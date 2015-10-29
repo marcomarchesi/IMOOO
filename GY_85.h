@@ -44,9 +44,9 @@ public:
     
     //-----------------------------------
     
-    inline float gyro_x( float* a ){ return *(   a ) / 14.375; }
-    inline float gyro_y( float* a ){ return *( 1+a ) / 14.375; }
-    inline float gyro_z( float* a ){ return *( 2+a ) / 14.375; }
+    inline float gyro_x( float* a ){ return *(   a ); }
+    inline float gyro_y( float* a ){ return *( 1+a ); }
+    inline float gyro_z( float* a ){ return *( 2+a ); }
     inline float temp  ( float* a ){ return  35+( *( 3+a )+13200 ) / 280; }
 };
 
