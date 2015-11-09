@@ -38,7 +38,8 @@ void loop()
       float roll = Mad.getRoll();
       float pitch = Mad.getPitch();
       float yaw = Mad.getYaw();
-      
+
+
       Serial.print  ( " AB " );
       Serial.print ( ax );
       Serial.print  ( " " );
@@ -66,3 +67,6 @@ void loop()
   
       delay(20); //50Hz             // only read every 0,5 seconds, 10ms for 100Hz, 20ms for 50Hz
 }
+
+
+

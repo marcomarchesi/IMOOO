@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------------------------------
 // Definitions
 
-#define betaDef		0.2f		// 2 * proportional gain
+#define betaDef		0.9f		// 2 * proportional gain
 
 //---------------------------------------------------------------------------------------------------
 // Variable definitions
@@ -41,23 +41,33 @@ float invSqrt(float x);
 
 float MadgwickAHRS::getRoll()
 {
-	return atan2( 2 * (q0 * q1 + q2 * q3), q0 * q0 - q1 * q1 - q2 * q2 + q3 * q3 );
+	// float gx = 2 * (q1*q3 - q0*q2);
+	// float gy = 2 * (q0*q1 + q2*q3);
+	// float gz = q0*q0 - q1*q1 - q2*q2 + q3*q3;
+	return atan2(2 * q2 * q3 + 2 * q0 * q1, 2 * q0 * q0 + 2 * q3 * q3 - 1);
+	// return atan(gy / sqrt(gx*gx + gz*gz));
 }
 
 float MadgwickAHRS::getPitch()
 {
+	// float gx = 2 * (q1*q3 - q0*q2);
+	// float gy = 2 * (q0*q1 + q2*q3);
+	// float gz = q0*q0 - q1*q1 - q2*q2 + q3*q3;
+	// return atan(gx / sqrt(gy*gy + gz*gz));
 	return -asin(2*(q1 * q3 - q0 * q2));
 }
 
 float MadgwickAHRS::getYaw()
 {
-	return atan2( 2 * (q1 * q2) + (q0 * q3), q0 * q0 + q1 * q1 - q2 * q2 - q3 * q3); 
+	return atan2( 2 * (q1 * q2 + q0 * q3), 2*q0*q0+2*q1*q1-1); 
 }
 
 void MadgwickAHRS::init(float freq)
 {
 	sampleFreq = freq;
 	beta = betaDef;								// 2 * proportional gain (Kp)
+  beta_counter = 0;
+  
 	q0 = 1.0f, q1 = 0.0f, q2 = 0.0f, q3 = 0.0f;	// quaternion of sensor frame relative to auxiliary frame
 }
 
@@ -67,6 +77,14 @@ void MadgwickAHRS::update(float gx, float gy, float gz, float ax, float ay, floa
 	float qDot1, qDot2, qDot3, qDot4;
 	float hx, hy;
 	float _2q0mx, _2q0my, _2q0mz, _2q1mx, _2bx, _2bz, _4bx, _4bz, _2q0, _2q1, _2q2, _2q3, _2q0q2, _2q2q3, q0q0, q0q1, q0q2, q0q3, q1q1, q1q2, q1q3, q2q2, q2q3, q3q3;
+
+  if(beta_counter < 100)
+  {
+    beta_counter++;
+  }else
+  {
+    beta = 0.1f;
+  }
 
 	// Use IMU algorithm if magnetometer measurement invalid (avoids NaN in magnetometer normalisation)
 	// if((mx == 0.0f) && (my == 0.0f) && (mz == 0.0f)) {
