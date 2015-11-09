@@ -29,7 +29,7 @@ public:
 private:
 	float sampleFreq;	
 	float beta;				// algorithm gain
-  int beta_counter;
+  float beta_counter;
 	float q0, q1, q2, q3;	// quaternion of sensor frame relative to auxiliary frame
 };
 #endif
