@@ -44,7 +44,8 @@ float MadgwickAHRS::getRoll()
 	// float gx = 2 * (q1*q3 - q0*q2);
 	// float gy = 2 * (q0*q1 + q2*q3);
 	// float gz = q0*q0 - q1*q1 - q2*q2 + q3*q3;
-	return atan2(2 * q2 * q3 + 2 * q0 * q1, 2 * q0 * q0 + 2 * q3 * q3 - 1);
+  return roll;
+//	return atan2(2 * q2 * q3 + 2 * q0 * q1, 2 * q0 * q0 + 2 * q3 * q3 - 1);
 	// return atan(gy / sqrt(gx*gx + gz*gz));
 }
 
@@ -69,6 +70,8 @@ void MadgwickAHRS::init(float freq)
   beta_counter = 0;
   
 	q0 = 1.0f, q1 = 0.0f, q2 = 0.0f, q3 = 0.0f;	// quaternion of sensor frame relative to auxiliary frame
+  roll = 0.0f;
+  past_roll = 0.0f;
 }
 
 void MadgwickAHRS::update(float gx, float gy, float gz, float ax, float ay, float az, float mx, float my, float mz) {
@@ -78,12 +81,14 @@ void MadgwickAHRS::update(float gx, float gy, float gz, float ax, float ay, floa
 	float hx, hy;
 	float _2q0mx, _2q0my, _2q0mz, _2q1mx, _2bx, _2bz, _4bx, _4bz, _2q0, _2q1, _2q2, _2q3, _2q0q2, _2q2q3, q0q0, q0q1, q0q2, q0q3, q1q1, q1q2, q1q3, q2q2, q2q3, q3q3;
 
-  if(beta_counter < 500)
-  {
-    beta_counter = beta_counter + 1;
-  }
-  beta = betaDef - 0.1* (beta_counter / 40);
 
+  past_roll = roll;
+
+  beta_counter = beta_counter + 1;
+  if (beta_counter > 100)
+    beta = 0.1f;
+
+   
 	// Use IMU algorithm if magnetometer measurement invalid (avoids NaN in magnetometer normalisation)
 	// if((mx == 0.0f) && (my == 0.0f) && (mz == 0.0f)) {
 	// 	MadgwickAHRSupdateIMU(gx, gy, gz, ax, ay, az);
@@ -171,6 +176,14 @@ void MadgwickAHRS::update(float gx, float gy, float gz, float ax, float ay, floa
 	q1 *= recipNorm;
 	q2 *= recipNorm;
 	q3 *= recipNorm;
+
+  roll = atan2(2 * q2 * q3 + 2 * q0 * q1, 2 * q0 * q0 + 2 * q3 * q3 - 1);
+
+  if(abs(roll - past_roll) > 5)
+  {
+    beta_counter = 0;
+    beta = betaDef;
+  }
 }
 
 

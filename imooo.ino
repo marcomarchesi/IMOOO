@@ -16,7 +16,7 @@ void setup()
     delay(10);
     GY85.init();
     Mad.init(50);
-    delay(1000);  //one second
+    delay(10);  //one second
 }
 
 
