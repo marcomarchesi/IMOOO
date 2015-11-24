@@ -32,9 +32,11 @@ public:
 	float getRoll();
 	float getPitch();
 	float getYaw();
+  float beta;       // algorithm gain
+  float delta;
 private:
 	float sampleFreq;	
-	float beta;				// algorithm gain
+	
   float beta_counter;
 	float q0, q1, q2, q3;	// quaternion of sensor frame relative to auxiliary frame
   float roll;
