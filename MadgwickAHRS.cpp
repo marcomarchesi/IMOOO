@@ -41,26 +41,15 @@ float invSqrt(float x);
 
 float MadgwickAHRS::getRoll()
 {
-	// float gx = 2 * (q1*q3 - q0*q2);
-	// float gy = 2 * (q0*q1 + q2*q3);
-	// float gz = q0*q0 - q1*q1 - q2*q2 + q3*q3;
   return roll;
-//	return atan2(2 * q2 * q3 + 2 * q0 * q1, 2 * q0 * q0 + 2 * q3 * q3 - 1);
-	// return atan(gy / sqrt(gx*gx + gz*gz));
 }
-
 float MadgwickAHRS::getPitch()
 {
-	// float gx = 2 * (q1*q3 - q0*q2);
-	// float gy = 2 * (q0*q1 + q2*q3);
-	// float gz = q0*q0 - q1*q1 - q2*q2 + q3*q3;
-	// return atan(gx / sqrt(gy*gy + gz*gz));
-	return -asin(2*(q1 * q3 - q0 * q2));
+	return pitch;
 }
-
 float MadgwickAHRS::getYaw()
 {
-	return atan2( 2 * (q1 * q2 + q0 * q3), 2*q0*q0+2*q1*q1-1); 
+	return yaw; 
 }
 
 void MadgwickAHRS::init(float freq)
@@ -71,6 +60,8 @@ void MadgwickAHRS::init(float freq)
   
 	q0 = 1.0f, q1 = 0.0f, q2 = 0.0f, q3 = 0.0f;	// quaternion of sensor frame relative to auxiliary frame
   roll = 0.0f;
+  pitch = 0.0f;
+  yaw = 0.0f;
   past_roll = 0.0f;
 }
 
@@ -172,15 +163,21 @@ void MadgwickAHRS::update(float gx, float gy, float gz, float ax, float ay, floa
 	q2 *= recipNorm;
 	q3 *= recipNorm;
 
-  roll = atan2(2 * q2 * q3 + 2 * q0 * q1, 2 * q0 * q0 + 2 * q3 * q3 - 1);
+  rho = acos(q0);
+  roll = rho * 2 * (q1 / sin(rho));
+  pitch = rho * 2 * (q2 / sin(rho));
+  yaw = rho * 2 * (q3 / sin(rho));
+  
   delta = abs(roll - past_roll);
 
-  if (delta < 0.01)
-    beta = 0.1;
-  else if (delta < 0.037)
-    beta = 30 * delta - 0.2;
-  else
-    beta = 0.9;
+  beta = 0.9;
+
+//  if (delta < 0.01)
+//    beta = 0.1;
+//  else if (delta < 0.037)
+//    beta = 30 * delta - 0.2;
+//  else
+//    beta = 0.9;
 }
 
 

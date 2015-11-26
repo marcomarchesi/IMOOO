@@ -38,8 +38,9 @@ private:
 	float sampleFreq;	
 	
   float beta_counter;
+  float rho;
 	float q0, q1, q2, q3;	// quaternion of sensor frame relative to auxiliary frame
-  float roll;
+  float roll,pitch,yaw;
   float past_roll;
 };
 #endif

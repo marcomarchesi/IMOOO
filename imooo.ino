@@ -107,7 +107,7 @@ void loop()
     cy = (cy - my_offset);
     cz = (cz - mz_offset);
 
-      Mad.update(gx,gy,gz,ax,ay,az,cx,cy,cz);
+      Mad.update(gx,gz,-gy,ax,az,-ay,cz,cx,cy);
       float roll = Mad.getRoll();
       float pitch = Mad.getPitch();
       float yaw = Mad.getYaw();
