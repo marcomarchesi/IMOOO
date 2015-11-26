@@ -9,9 +9,9 @@
 GY_85 GY85;     //create the object
 MadgwickAHRS Mad;
 
-float mx_offset = 0.0f;
-float my_offset = 0.0f;
-float mz_offset = 0.0f;
+float mx_offset = -8.37f;
+float my_offset = 2.99f;
+float mz_offset = 0.51f;
 float mx_fc = 0.0f;
 float my_fc = 0.0f;
 float mz_fc = 0.0f;
@@ -74,36 +74,36 @@ void loop()
     float gz = GY85.gyro_z( GY85.readGyro() ) * FACTORGYR ;
 
 
-    mx_max = max(cx,mx_max);
-    my_max = max(cy,my_max);
-    mz_max = max(cz,mz_max);
-    mx_min = min(cx,mx_min);
-    my_min = min(cy,my_min);
-    mz_min = min(cz,mz_min);
+//    mx_max = max(cx,mx_max);
+//    my_max = max(cy,my_max);
+//    mz_max = max(cz,mz_max);
+//    mx_min = min(cx,mx_min);
+//    my_min = min(cy,my_min);
+//    mz_min = min(cz,mz_min);
 
-    mx_offset = get_mag_offset(mx_max,mx_min);
-    my_offset = get_mag_offset(my_max,my_min);
-    mz_offset = get_mag_offset(mz_max,mz_min);
+//    mx_offset = get_mag_offset(mx_max,mx_min);
+//    my_offset = get_mag_offset(my_max,my_min);
+//    mz_offset = get_mag_offset(mz_max,mz_min);
 
-    mx_fc = get_mag_fc(mx_min,mx_max,my_min,my_max,mz_min,mz_max,1);
-    my_fc = get_mag_fc(mx_min,mx_max,my_min,my_max,mz_min,mz_max,2);
-    mz_fc = get_mag_fc(mx_min,mx_max,my_min,my_max,mz_min,mz_max,3);
+//    mx_fc = get_mag_fc(mx_min,mx_max,my_min,my_max,mz_min,mz_max,1);
+//    my_fc = get_mag_fc(mx_min,mx_max,my_min,my_max,mz_min,mz_max,2);
+//    mz_fc = get_mag_fc(mx_min,mx_max,my_min,my_max,mz_min,mz_max,3);
     
 
-    Serial.print("X off: ");
-    Serial.print(mx_offset);
-    Serial.print("Y off: ");
-    Serial.print(my_offset);
-    Serial.print("Z off: ");
-    Serial.print(mz_offset);
-    Serial.print("X fc: ");
-    Serial.print(mx_fc);
-    Serial.print("Y fc: ");
-    Serial.print(my_fc);
-    Serial.print("Z fc: ");
-    Serial.println(mz_fc);
+//    Serial.print("X off: ");
+//    Serial.print(mx_offset);
+//    Serial.print("Y off: ");
+//    Serial.print(my_offset);
+//    Serial.print("Z off: ");
+//    Serial.print(mz_offset);
+//    Serial.print("X fc: ");
+//    Serial.print(mx_fc);
+//    Serial.print("Y fc: ");
+//    Serial.print(my_fc);
+//    Serial.print("Z fc: ");
+//    Serial.println(mz_fc);
 
-    cx = (cx - mx_offset);
+    cx = (cx - mx_offset);  // just HARD IRON CORRECTION
     cy = (cy - my_offset);
     cz = (cz - mz_offset);
 
@@ -112,33 +112,32 @@ void loop()
       float pitch = Mad.getPitch();
       float yaw = Mad.getYaw();
 
-
-//      Serial.print  ( " AB " );
-//      Serial.print ( ax );
-//      Serial.print  ( " " );
-//      Serial.print ( ay );
-//      Serial.print  ( " " );
-//      Serial.print ( az );
-//      Serial.print  ( " " );
-//      Serial.print  ( gx );
-//      Serial.print (" ");
-//      Serial.print ( gy );
-//      Serial.print (" ");
-//      Serial.print ( gz );
-//      Serial.print (" ");
+      Serial.print  ( " AB " );
+      Serial.print ( ax );
+      Serial.print  ( " " );
+      Serial.print ( ay );
+      Serial.print  ( " " );
+      Serial.print ( az );
+      Serial.print  ( " " );
+      Serial.print  ( gx );
+      Serial.print (" ");
+      Serial.print ( gy );
+      Serial.print (" ");
+      Serial.print ( gz );
+      Serial.print (" ");
       Serial.print (cx);
       Serial.print (" ");
       Serial.print (cy);
       Serial.print (" ");
-      Serial.println (cz);
-//      Serial.print (" ");
-//      Serial.print (roll);
-//      Serial.print(" ");
-//      Serial.print(pitch);
-//      Serial.print(" ");
-//      Serial.print(yaw);
-//      Serial.print(" ");
-//      Serial.println(Mad.beta);
+      Serial.print (cz);
+      Serial.print (" ");
+      Serial.print (roll);
+      Serial.print(" ");
+      Serial.print(pitch);
+      Serial.print(" ");
+      Serial.print(yaw);
+      Serial.print(" ");
+      Serial.println(Mad.beta);
   
       delay(20); //50Hz             // only read every 0,5 seconds, 10ms for 100Hz, 20ms for 50Hz
 }
