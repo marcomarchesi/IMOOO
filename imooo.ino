@@ -9,9 +9,9 @@
 GY_85 GY85;     //create the object
 MadgwickAHRS Mad;
 
-float mx_offset = -8.37f;
-float my_offset = 2.99f;
-float mz_offset = 0.51f;
+float mx_offset = -6.72f;
+float my_offset = 1.47f;
+float mz_offset = 1.24f;
 float mx_fc = 0.0f;
 float my_fc = 0.0f;
 float mz_fc = 0.0f;
@@ -62,16 +62,16 @@ void setup()
 void loop()
 {
     float ax = (float)GY85.accelerometer_x( GY85.readFromAccelerometer() ) * FACTORACC;
-    float ay = (float)GY85.accelerometer_y( GY85.readFromAccelerometer() ) * FACTORACC;
-    float az = (float)GY85.accelerometer_z( GY85.readFromAccelerometer() ) * FACTORACC;
+    float ay = -(float)GY85.accelerometer_z( GY85.readFromAccelerometer() ) * FACTORACC;
+    float az = (float)GY85.accelerometer_y( GY85.readFromAccelerometer() ) * FACTORACC;
     
     float cx = (float)GY85.compass_x( GY85.readFromCompass() ) * FACTORMAG;
-    float cy = (float)GY85.compass_y( GY85.readFromCompass() ) * FACTORMAG;
-    float cz = (float)GY85.compass_z( GY85.readFromCompass() ) * FACTORMAG;
+    float cy = -(float)GY85.compass_z( GY85.readFromCompass() ) * FACTORMAG;
+    float cz = (float)GY85.compass_y( GY85.readFromCompass() ) * FACTORMAG;
 
     float gx = GY85.gyro_x( GY85.readGyro() ) * FACTORGYR ;
-    float gy = GY85.gyro_y( GY85.readGyro() ) * FACTORGYR ;
-    float gz = GY85.gyro_z( GY85.readGyro() ) * FACTORGYR ;
+    float gy = -GY85.gyro_z( GY85.readGyro() ) * FACTORGYR ;
+    float gz = GY85.gyro_y( GY85.readGyro() ) * FACTORGYR ;
 
 
 //    mx_max = max(cx,mx_max);
@@ -80,7 +80,7 @@ void loop()
 //    mx_min = min(cx,mx_min);
 //    my_min = min(cy,my_min);
 //    mz_min = min(cz,mz_min);
-
+//
 //    mx_offset = get_mag_offset(mx_max,mx_min);
 //    my_offset = get_mag_offset(my_max,my_min);
 //    mz_offset = get_mag_offset(mz_max,mz_min);
@@ -95,7 +95,7 @@ void loop()
 //    Serial.print("Y off: ");
 //    Serial.print(my_offset);
 //    Serial.print("Z off: ");
-//    Serial.print(mz_offset);
+//    Serial.println(mz_offset);
 //    Serial.print("X fc: ");
 //    Serial.print(mx_fc);
 //    Serial.print("Y fc: ");
@@ -107,37 +107,37 @@ void loop()
     cy = (cy - my_offset);
     cz = (cz - mz_offset);
 
-      Mad.update(gx,gz,-gy,ax,az,-ay,cz,cx,cy);
+      Mad.update(gx,gy,gz,ax,ay,az,cx,cy,cz);
       float roll = Mad.getRoll();
       float pitch = Mad.getPitch();
       float yaw = Mad.getYaw();
 
-      Serial.print  ( " AB " );
-      Serial.print ( ax );
-      Serial.print  ( " " );
-      Serial.print ( ay );
-      Serial.print  ( " " );
-      Serial.print ( az );
-      Serial.print  ( " " );
-      Serial.print  ( gx );
-      Serial.print (" ");
-      Serial.print ( gy );
-      Serial.print (" ");
-      Serial.print ( gz );
-      Serial.print (" ");
-      Serial.print (cx);
-      Serial.print (" ");
-      Serial.print (cy);
-      Serial.print (" ");
-      Serial.print (cz);
-      Serial.print (" ");
-      Serial.print (roll);
-      Serial.print(" ");
-      Serial.print(pitch);
-      Serial.print(" ");
-      Serial.print(yaw);
-      Serial.print(" ");
-      Serial.println(Mad.beta);
+//      Serial.print  ( " AB " );
+//      Serial.print ( ax );
+//      Serial.print  ( " " );
+//      Serial.print ( ay );
+//      Serial.print  ( " " );
+//      Serial.print ( az );
+//      Serial.print  ( " " );
+//      Serial.print  ( gx );
+//      Serial.print (" ");
+//      Serial.print ( gy );
+//      Serial.print (" ");
+//      Serial.print ( gz );
+//      Serial.print (" ");
+//      Serial.print (cx);
+//      Serial.print (" ");
+//      Serial.print (cy);
+//      Serial.print (" ");
+//      Serial.print (cz);
+//      Serial.print (" ");
+//      Serial.println (roll);
+//      Serial.print(" ");
+//      Serial.print(pitch);
+//      Serial.print(" ");
+        Serial.println(yaw);
+//      Serial.print(" ");
+//      Serial.println(Mad.beta);
   
       delay(20); //50Hz             // only read every 0,5 seconds, 10ms for 100Hz, 20ms for 50Hz
 }
