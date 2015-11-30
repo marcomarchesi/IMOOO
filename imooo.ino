@@ -112,32 +112,32 @@ void loop()
       float pitch = Mad.getPitch();
       float yaw = Mad.getYaw();
 
-//      Serial.print  ( " AB " );
-//      Serial.print ( ax );
-//      Serial.print  ( " " );
-//      Serial.print ( ay );
-//      Serial.print  ( " " );
-//      Serial.print ( az );
-//      Serial.print  ( " " );
-//      Serial.print  ( gx );
-//      Serial.print (" ");
-//      Serial.print ( gy );
-//      Serial.print (" ");
-//      Serial.print ( gz );
-//      Serial.print (" ");
-//      Serial.print (cx);
-//      Serial.print (" ");
-//      Serial.print (cy);
-//      Serial.print (" ");
-//      Serial.print (cz);
-//      Serial.print (" ");
-//      Serial.print (roll);
-//      Serial.print(" ");
-//      Serial.print(pitch);
-//      Serial.print(" ");
-      Serial.println(yaw);
-//      Serial.print(" ");
-//      Serial.println(Mad.beta);
+      Serial.print  ( " AB " );
+      Serial.print ( ax );
+      Serial.print  ( " " );
+      Serial.print ( ay );
+      Serial.print  ( " " );
+      Serial.print ( az );
+      Serial.print  ( " " );
+      Serial.print  ( gx );
+      Serial.print (" ");
+      Serial.print ( gy );
+      Serial.print (" ");
+      Serial.print ( gz );
+      Serial.print (" ");
+      Serial.print (cx);
+      Serial.print (" ");
+      Serial.print (cy);
+      Serial.print (" ");
+      Serial.print (cz);
+      Serial.print (" ");
+      Serial.print (roll);
+      Serial.print(" ");
+      Serial.print(pitch);
+      Serial.print(" ");
+      Serial.print(yaw);
+      Serial.print(" ");
+      Serial.println(Mad.beta);
   
       delay(20); //50Hz             // only read every 0,5 seconds, 10ms for 100Hz, 20ms for 50Hz
 }

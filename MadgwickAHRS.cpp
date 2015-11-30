@@ -173,14 +173,15 @@ void MadgwickAHRS::update(float gx, float gy, float gz, float ax, float ay, floa
 	q3 *= recipNorm;
 
   roll = atan2(2 * q2 * q3 + 2 * q0 * q1, 2 * q0 * q0 + 2 * q3 * q3 - 1);
-  delta = abs(roll - past_roll);
-
-  if (delta < 0.01)
-    beta = 0.1;
-  else if (delta < 0.037)
-    beta = 30 * delta - 0.2;
-  else
-    beta = 0.9;
+  beta = 0.4;
+//  delta = abs(roll - past_roll);
+//
+//  if (delta < 0.01)
+//    beta = 0.1;
+//  else if (delta < 0.037)
+//    beta = 30 * delta - 0.2;
+//  else
+//    beta = 0.9;
 }
 
 
