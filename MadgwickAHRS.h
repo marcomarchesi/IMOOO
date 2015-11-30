@@ -40,6 +40,8 @@ private:
   float beta_counter;
 	float q0, q1, q2, q3;	// quaternion of sensor frame relative to auxiliary frame
   float roll;
+  float pitch;
+  float yaw;
   float past_roll;
 };
 #endif
