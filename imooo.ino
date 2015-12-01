@@ -12,12 +12,23 @@ MadgwickAHRS Mad;
 float mx_offset = -8.37f;
 float my_offset = 2.99f;
 float mz_offset = 0.51f;
+float ax_offset = 0.0f;
+float ay_offset = 0.0f;
+float az_offset = 0.0f;
 float mx_fc = 0.0f;
 float my_fc = 0.0f;
 float mz_fc = 0.0f;
 float mx_max,mx_min;
 float my_max,my_min;
 float mz_max,mz_min;
+
+float roll = 0.0f;
+float pitch = 0.0f;
+float yaw = 0.0f;
+
+unsigned long time, looptime;
+
+
 
 // HARD IRON CORRECTION
 float get_mag_offset(float min_i,float max_i)
@@ -51,16 +62,19 @@ void setup()
 {
     Wire.begin();
     delay(10);
-    Serial.begin(9600);
+    Serial.begin(115200);
     delay(10);
     GY85.init();
-    Mad.init(50);
+    Mad.init(100);
     delay(10);  //one second
 }
 
 
 void loop()
 {
+
+    time = millis();
+    
     float ax = (float)GY85.accelerometer_x( GY85.readFromAccelerometer() ) * FACTORACC;
     float ay = (float)GY85.accelerometer_y( GY85.readFromAccelerometer() ) * FACTORACC;
     float az = (float)GY85.accelerometer_z( GY85.readFromAccelerometer() ) * FACTORACC;
@@ -108,38 +122,41 @@ void loop()
     cz = (cz - mz_offset);
 
       Mad.update(gx,gy,gz,ax,ay,az,cx,cy,cz);
-      float roll = Mad.getRoll();
-      float pitch = Mad.getPitch();
-      float yaw = Mad.getYaw();
+      roll = Mad.getRoll();
+      pitch = Mad.getPitch();
+      yaw = Mad.getYaw();
 
       Serial.print  ( " AB " );
-      Serial.print ( ax );
-      Serial.print  ( " " );
-      Serial.print ( ay );
-      Serial.print  ( " " );
-      Serial.print ( az );
-      Serial.print  ( " " );
-      Serial.print  ( gx );
-      Serial.print (" ");
-      Serial.print ( gy );
-      Serial.print (" ");
-      Serial.print ( gz );
-      Serial.print (" ");
-      Serial.print (cx);
-      Serial.print (" ");
-      Serial.print (cy);
-      Serial.print (" ");
-      Serial.print (cz);
-      Serial.print (" ");
+//      Serial.print ( ax );
+//      Serial.print  ( " " );
+//      Serial.print ( ay );
+//      Serial.print  ( " " );
+//      Serial.print ( az );
+//      Serial.print  ( " " );
+//      Serial.print  ( gx );
+//      Serial.print (" ");
+//      Serial.print ( gy );
+//      Serial.print (" ");
+//      Serial.print ( gz );
+//      Serial.print (" ");
+//      Serial.print (cx);
+//      Serial.print (" ");
+//      Serial.print (cy);
+//      Serial.print (" ");
+//      Serial.print (cz);
+//      Serial.print (" ");
       Serial.print (roll);
       Serial.print(" ");
       Serial.print(pitch);
       Serial.print(" ");
-      Serial.print(yaw);
-      Serial.print(" ");
-      Serial.println(Mad.beta);
+      Serial.println(yaw);
+//      Serial.print(" ");
+//      Serial.println(Mad.beta);
+
+      looptime = millis() - time;   // <15ms
+//      Serial.println(looptime);
   
-      delay(20); //50Hz             // only read every 0,5 seconds, 10ms for 100Hz, 20ms for 50Hz
+      delay(10); //100Hz             // only read every 0,5 seconds, 10ms for 100Hz, 20ms for 50Hz
 }
 
 

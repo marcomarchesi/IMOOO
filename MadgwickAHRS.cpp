@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------------------------------
 // Definitions
 
-#define betaDef		0.9f		// 2 * proportional gain
+#define betaDef		0.4f		// 2 * proportional gain
 
 //---------------------------------------------------------------------------------------------------
 // Variable definitions
@@ -41,22 +41,17 @@ float invSqrt(float x);
 
 float MadgwickAHRS::getRoll()
 {
-
   return roll;
-//	return atan2(2 * q2 * q3 + 2 * q0 * q1, 2 * q0 * q0 + 2 * q3 * q3 - 1);
-	// return atan(gy / sqrt(gx*gx + gz*gz));
 }
 
 float MadgwickAHRS::getPitch()
 {
     return pitch;
-//	return -asin(2*(q1 * q3 - q0 * q2));
 }
 
 float MadgwickAHRS::getYaw()
 {
     return yaw;
-//	return atan2( 2 * (q1 * q2 + q0 * q3), 2*q0*q0+2*q1*q1-1); 
 }
 
 void MadgwickAHRS::init(float freq)
@@ -66,8 +61,9 @@ void MadgwickAHRS::init(float freq)
   beta_counter = 0;
   
 	q0 = 1.0f, q1 = 0.0f, q2 = 0.0f, q3 = 0.0f;	// quaternion of sensor frame relative to auxiliary frame
-  roll = 0.0f; yaw = 0.0f; pitch = 0.0f;
-  past_roll = 0.0f;
+  roll = 0.0f; 
+  yaw = 0.0f; 
+  pitch = 0.0f;
 }
 
 void MadgwickAHRS::update(float gx, float gy, float gz, float ax, float ay, float az, float mx, float my, float mz) {
@@ -76,10 +72,7 @@ void MadgwickAHRS::update(float gx, float gy, float gz, float ax, float ay, floa
 	float qDot1, qDot2, qDot3, qDot4;
 	float hx, hy;
 	float _2q0mx, _2q0my, _2q0mz, _2q1mx, _2bx, _2bz, _4bx, _4bz, _2q0, _2q1, _2q2, _2q3, _2q0q2, _2q2q3, q0q0, q0q1, q0q2, q0q3, q1q1, q1q2, q1q3, q2q2, q2q3, q3q3;
-
-
-  past_roll = roll;
-   
+ 
 	// Use IMU algorithm if magnetometer measurement invalid (avoids NaN in magnetometer normalisation)
 	// if((mx == 0.0f) && (my == 0.0f) && (mz == 0.0f)) {
 	// 	MadgwickAHRSupdateIMU(gx, gy, gz, ax, ay, az);
@@ -174,16 +167,6 @@ void MadgwickAHRS::update(float gx, float gy, float gz, float ax, float ay, floa
   pitch = rho * 2 * (q2 / sin(rho));
   yaw = rho * 2 * (q3 / sin(rho));
 
-//  roll = atan2(2 * q2 * q3 + 2 * q0 * q1, 2 * q0 * q0 + 2 * q3 * q3 - 1);
-//  beta = 0.4;
-//  delta = abs(roll - past_roll);
-//
-//  if (delta < 0.01)
-//    beta = 0.1;
-//  else if (delta < 0.037)
-//    beta = 30 * delta - 0.2;
-//  else
-//    beta = 0.9;
 }
 
 
